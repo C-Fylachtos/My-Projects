@@ -1,0 +1,17 @@
+.Navbar {
+  background: rgb(13, 36, 167);
+  width: 100%;
+  padding: 1.5rem;
+  display: flex;
+  justify-content: space-around;
+  z-index: 10;
+}
+
+.Navbar a {
+  text-decoration: none;
+  color: rgb(167, 188, 199);
+  transition: all 0.5s ease;
+}
+.Navbar a.Navbar-active {
+  color: white;
+}

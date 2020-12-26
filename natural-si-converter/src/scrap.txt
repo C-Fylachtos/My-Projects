@@ -1,0 +1,162 @@
+const currencyEl_one = document.getElementById("currency-one");
+const amountEl_one = document.getElementById("amount-one");
+const currencyEl_two = document.getElementById("currency-two");
+const amountEl_two = document.getElementById("amount-two");
+const rateEl = document.getElementById("rate");
+const result = document.getElementById("rate2");
+const toEnergy = document.getElementById("swap");
+const fromEnergy = document.getElementById("energy");
+const Input_Label = document.getElementById("Input_Label");
+
+
+// Array of data to use
+
+var Array_Natural = [
+  {
+    SiUnit: "Length",
+    UnitToGEv: 5.076e15,
+    EvToUnit: 0.15,
+    Label: "Meter",
+    GeVLabel: "GeV<sup>-1</sup>",
+  },
+  {
+    SiUnit: "Barn",
+    UnitToGEv: 2.56819e9,
+    EvToUnit: 0.15,
+    Label: "Barn",
+    GeVLabel: "GeV<sup>-2</sup>",
+  },
+  {
+    SiUnit: "Mass",
+    UnitToGEv: 5.6179e26,
+    EvToUnit: 0.15,
+    Label: "Kg",
+    GeVLabel: "GeV",
+  },
+  {
+    SiUnit: "Time",
+    UnitToGEv: 1.522844e24,
+    EvToUnit: 0.15,
+    Label: "Sec",
+    GeVLabel: "GeV<sup>-1</sup>",
+  },
+  {
+    SiUnit: "Momentum",
+    UnitToGEv: 1.871103e18,
+    EvToUnit: 0.15,
+    Label: "Kg*m/s",
+    GeVLabel: "GeV",
+  },
+  {
+    SiUnit: "Area",
+    UnitToGEv: 2.568185e31,
+    EvToUnit: 0.15,
+    Label: "m<sup>2</sup>",
+    GeVLabel: "GeV<sup>-2</sup>",
+  },
+  {
+    SiUnit: "Force",
+    UnitToGEv: 1.231618e-6,
+    EvToUnit: 0.15,
+    Label: "Newton",
+    GeVLabel: "GeV<sup>2</sup>",
+  },
+  {
+    SiUnit: "Energy Density",
+    UnitToGEv: 4.795703e-38,
+    EvToUnit: 0.15,
+    Label: "J‎ / m<sup>3</sup>",
+    GeVLabel: "GeV<sup>4</sup>",
+  },
+  {
+    SiUnit: "Energy",
+    UnitToGEv: 6.241418e9,
+    EvToUnit: 0.15,
+    Label: "J‎",
+    GeVLabel: "GeV",
+  },
+];
+
+var test1 = 1.6022e-10;
+
+var meters = Array_Natural[0].UnitToGEv;
+var powerm = 1 / test1;
+console.log(test1);
+console.log(powerm.toExponential(6));
+
+function calculate2() {
+  toEnergy.innerText = `${currencyEl_one.value} to Energy`;
+  fromEnergy.innerText = `Energy to ${currencyEl_one.value}`;
+  const currency_one = currencyEl_one.value;
+  Array_Natural.forEach((e) => {
+    if (currency_one == e.SiUnit) {
+      if (toEnergy.classList.contains("active")) {
+        Input_Label.innerHTML = e.Label;
+        rateEl.innerHTML = `1 ${e.Label} = ${DisplayNumber(e.UnitToGEv)} ${
+          e.GeVLabel
+        }
+      `;
+        result.innerHTML =
+          "Your Result is: " +
+          "<span style='color: red;'>" +
+          DisplayNumber(e.UnitToGEv * amountEl_one.value) +
+          " " +
+          "</span> " +
+          e.GeVLabel;
+      } else {
+        Input_Label.innerHTML = e.GeVLabel;
+        rateEl.innerHTML = `1 ${e.GeVLabel} = ${DisplayNumber(
+          1 / e.UnitToGEv
+        )} ${e.Label}`;
+        result.innerHTML =
+          "Your Result is: " +
+          "<span style='color: red;'>" +
+          DisplayNumber(amountEl_one.value / e.UnitToGEv) +
+          " " +
+          "</span> " +
+          e.Label;
+      }
+    }
+  });
+}
+
+// Display number in power of 10
+
+function DisplayNumber(e) {
+  const input = +e;
+  const temp2 = input.toExponential(6);
+  console.log(temp2);
+  const first = temp2.split("e")[0].substring(0);
+  var exp = "";
+  console.log(temp2.split("e")[1].substring(0));
+  if (parseInt(temp2.split("e")[1].substring(0)) > 0) {
+    exp = temp2.split("e")[1].substring(1).sup();
+  } else {
+    exp = temp2.split("e")[1].substring(0).sup();
+  }
+
+  const string1 = `${first} *10${exp}`;
+  return string1;
+}
+
+// Event listeners
+
+currencyEl_one.addEventListener("change", calculate2);
+amountEl_one.addEventListener("input", calculate2);
+currencyEl_two.addEventListener("change", calculate2);
+amountEl_two.addEventListener("input", calculate2);
+toEnergy.addEventListener("click", () => {
+  if (!toEnergy.classList.contains("active")) {
+    toEnergy.classList.toggle("active");
+    fromEnergy.classList.toggle("active");
+    calculate2();
+  }
+});
+fromEnergy.addEventListener("click", () => {
+  if (!fromEnergy.classList.contains("active")) {
+    fromEnergy.classList.toggle("active");
+    toEnergy.classList.toggle("active");
+    calculate2();
+  }
+});
+calculate2();
